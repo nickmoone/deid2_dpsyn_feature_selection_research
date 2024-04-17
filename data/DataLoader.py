@@ -86,7 +86,8 @@ class DataLoader:
             print("********** afer fillna ***********")
             print(self.private_data)
             print("------------------------> private dataset: ", PRIV_DATA)
-            self.private_data = self.binning_attributes(config['numerical_binning'], self.private_data)
+            if 'numerical_binning' in config:
+                self.private_data = self.binning_attributes(config['numerical_binning'], self.private_data)
             # self.private_data = self.grouping_attributes(config['grouping_attributes'], self.private_data)
             self.private_data = self.remove_identifier(self.private_data)
             # self.private_data = self.remove_determined_attributes(config['determined_attributes'], self.private_data)
@@ -181,7 +182,8 @@ class DataLoader:
         """remove the identifier attribute column
         
         """
-        data = data.drop(self.config['identifier'], axis=1)
+        if self.config['identifier']:
+            data = data.drop(self.config['identifier'], axis=1)
         print("------------------------> remove identifier column:", self.config['identifier'])
         print("identifier removed in DataLoader")
         return data
@@ -208,12 +210,17 @@ class DataLoader:
     def encode_remain(self, schema, config, data, is_private=False):
        
         # encoded_attr = list(config['numerical_binning'].keys()) + [grouping['grouped_name'] for grouping in config['grouping_attributes']]
-        encoded_attr = list(config['numerical_binning'].keys()) 
+        if 'numerical_binning' in config:
+            encoded_attr = list(config['numerical_binning'].keys())
+        else:
+            encoded_attr = []
         print("------------------------> start encoding remaining single attributes")
-        for attr in data.columns:    
+        for attr in data.columns:
             if attr in [self.config['identifier']] or attr in encoded_attr:
                 continue
             print("encode remain:", attr)
+            print("attr", attr)
+            print('values' in schema[attr])
             assert attr in schema and 'values' in schema[attr]
             # below line serves for syhthesizing a dataset when fixing PUMA,YEAR 
             # data[].unique() returns an array which includes all the unique values in the column

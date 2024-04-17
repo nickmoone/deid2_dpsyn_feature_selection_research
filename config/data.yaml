@@ -13,17 +13,17 @@
 # you can set the identifier attribute's name  below
 # in synthesis we will remove the column for privacy desire
 # identifier: sim_individual_id
-identifier: ID
+identifier: 
 
 
 # you can define the binning settings as you want
 # the three line means [min,max,step] values for bin,
 # referring to parameters1.json, we set as below 
 numerical_binning:
-  "Age":
-    - 14
-    - 87
-    - 10
+  "age":
+    - 0
+    - 100
+    - 1
 # numerical_binning:
 #   "AGE":
 #     - 20

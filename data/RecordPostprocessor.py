@@ -29,6 +29,8 @@ class RecordPostprocessor:
         
         """
         print("unbinning attributes ------------------------>")
+        if 'numerical_binning' not in self.config:
+            return data
         binning_info = self.config['numerical_binning']
         # print(binning_info)
         for att, spec_list in binning_info.items():
@@ -67,7 +69,10 @@ class RecordPostprocessor:
         """
         print("decode other attributes ------------------------>")
         grouping_attr = [info["grouped_name"] for info in self.config['grouping_attributes']]
-        binning_attr = [attr for attr in self.config['numerical_binning'].keys()]
+        if 'numerical_binning' in self.config:
+            binning_attr = [attr for attr in self.config['numerical_binning'].keys()]
+        else:
+            binning_attr = []
         for attr, mapping in decode_mapping.items():
             if attr in grouping_attr or attr in binning_attr:
                 continue
